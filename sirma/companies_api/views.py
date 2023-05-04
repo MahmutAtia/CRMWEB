@@ -22,12 +22,21 @@ import json
 
 
 
+
+
 # All Companies View 
 class CompanyApiCL(ListCreateAPIView):
    
     serializer_class = CompanySerializer
-    queryset = Company.objects.all()
     # permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        print(self.request.user)
+        if self.request.user.is_superuser:
+            qs = Company.objects.all()
+        else : 
+            qs = Company.objects.filter( user = self.request.user.id )
+        return qs
 
 
 class CompanyApiRUD(RetrieveUpdateDestroyAPIView):
@@ -78,13 +87,30 @@ class MyDataFrameAPIView(APIView):
     def get(self, request):
         
         # create a df
-        stats = Stats()
-        CountryToConmpny = stats.get_CountryToConmpny()
-       
+        print(request.user)
+        stats = Stats(user = request.user)
 
+        # num_of_companies
+        NumOfCompanies = stats.get_NumOfCompanies()
+
+        # countries
+        CountryToConmpny = stats.get_CountryToConmpny()
+
+        # contact types
+        ContactTypeCount = stats.get_ContactTypeCount()
+
+        # contact results
+        ContactResultCount = stats.get_ContactResultCount()
+       
         # create a dictionary from the analitics
         data= {
-            "CountryToConmpny": CountryToConmpny
+            "NumOfCompanies": NumOfCompanies,
+
+            "CountryToConmpny": CountryToConmpny,
+
+            "ContactTypeCount": ContactTypeCount,
+
+            "ContactResultCount": ContactResultCount,
         }
 
 

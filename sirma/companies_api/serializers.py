@@ -20,6 +20,9 @@ class CompanySerializer(serializers.ModelSerializer):
                     ,"company_url","contact_url"]
 
     def create(self, validated_data):
+
+    
+
         #recieve country input
         country = validated_data.pop("country")
         #get object
@@ -30,6 +33,14 @@ class CompanySerializer(serializers.ModelSerializer):
         # asgin country
         company.country = c
         # obj.user = fields.CurrentUserDefault()
+
+        #get user 
+        user = self.context['request'].user
+        print(user)
+
+        #assign user
+        company.user = user
+
         company.save()
         return company  
     
@@ -100,6 +111,8 @@ class ContactSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         print(validated_data)
+
+    
         #get company id     
         pk = self.context['view'].kwargs.get('pk')   #I couldn't do it somehow else it was tyring
     

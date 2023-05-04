@@ -4,22 +4,44 @@ import pandas as pd
 
 
 class Stats:
-    def __init__(self):
-        self.df_company = read_frame(Company.objects.all())
-        self.df_contacts = read_frame(Contact.objects.values('id','company_id' ,'typ_id__contact_type',  'date', 'result_id'))
+    def __init__(self, user):
+        self.user = user
+        if user.is_superuser:
+            self.df_company = read_frame(Company.objects.values('user__name','name' ,'country',  'status'))
+        else:
+            self.df_company = read_frame(Company.objects.filter(user=user.id).values('user__name','name' ,'country',  'status'))
+
+        self.df_contacts = read_frame(Contact.objects.values('id','company_id' ,'typ_id__contact_type',  'date', 'result_id__contact_result'))
         self.df_contacts.rename(columns={"company_id":"name"}, inplace=True)
-        self.df_merge = pd.merge(df_company,df_contacts ,on="name")
+        self.df_merge = pd.merge(self.df_company,self.df_contacts ,on="name")
 
-
+    def get_NumOfCompanies(self):
+        print(self.df_company["user__name"].unique)
+        return self.df_company.name.count()
+    
     def get_CountryToConmpny(self):
          counts =  self.df_company[["country","name"]].groupby("country").aggregate("count")
-
          li = []
          for row in counts.iterrows():
              li.append({"country" : row[0], "company_count":row[1][0]})
 
          return li
 
+    def get_ContactTypeCount(self):
+        counts = self.df_merge['typ_id__contact_type'].value_counts()
+        li = []
+        for row in counts.iteritems():
+            li.append({"contact_type" : row[0], "contact_count":row[1]})
+
+        return li
+    
+    def get_ContactResultCount(self):
+        counts = self.df_merge["result_id__contact_result"].value_counts()
+        li = []
+        for row in counts.iteritems():
+            li.append({"result" : row[0], "result_count":row[1]})
+
+        return li
 
 
 
