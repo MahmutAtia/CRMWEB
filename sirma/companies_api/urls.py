@@ -10,7 +10,7 @@ urlpatterns = [
     path('country',CountryList.as_view()),
     path('contact_result',ContactResultList.as_view()),
     path('contact_type',ContactTypeList.as_view()),
-    path('analitics',MyDataFrameAPIView.as_view()),
+    path('analitics/<int:days>',MyDataFrameAPIView.as_view()),
 
 
 

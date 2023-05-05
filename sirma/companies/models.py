@@ -14,7 +14,7 @@ class Country(models.Model):
 
 class Company(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL,null=True)
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=50 , unique=True)
     country = models.ForeignKey(Country,on_delete=models.CASCADE,null=True, blank=True )
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=30,null=True, blank=True)
@@ -26,13 +26,13 @@ class Company(models.Model):
 
 
 class ContactType(models.Model):
-    contact_type = models.CharField(max_length=128)
+    contact_type = models.CharField(max_length=20 )
 
     def __str__(self):
         return self.contact_type
 
 class ContactResult(models.Model):  
-    contact_result= models.CharField(max_length=128)
+    contact_result= models.CharField(max_length=20)
 
     def __str__(self):
         return self.contact_result
@@ -41,7 +41,7 @@ class Contact(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     typ = models.ForeignKey(ContactType,on_delete=models.SET_NULL , null=True)
     contact_time = models.CharField(max_length=10, null=True,blank=True)
-    date = models.CharField(max_length=10)   
+    date = models.DateField( null=True,blank=True)   
     result = models.ForeignKey(ContactResult , on_delete= models.SET_NULL,null=True)
     class Meta:
         ordering= ["company"]

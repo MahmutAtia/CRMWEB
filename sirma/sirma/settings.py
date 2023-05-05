@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 ## for simple JWT
 from datetime import timedelta
@@ -69,7 +70,7 @@ ROOT_URLCONF = 'sirma.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,"build")], # for the react code after building it
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,7 +132,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'build/static') # for react 
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -148,13 +152,15 @@ REST_FRAMEWORK = {
     # ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication'
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 1000
+    'PAGE_SIZE': 2000
 }
 
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
+   'AUTH_HEADER_TYPES': ('JWT',),   
    "ACCESS_TOKEN_LIFETIME": timedelta(weeks=4),
 }
 
@@ -207,6 +213,9 @@ DJOSER = {
     },
 }
 
+
+
+ALLOWED_HOSTS = [    'localhost',    '127.0.0.1',    'dea1-78-168-153-158.ngrok-free.app',]
 
 
 CORS_ALLOW_CREDENTIALS = True

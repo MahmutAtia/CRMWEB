@@ -84,11 +84,18 @@ class ContactTypeList(ListCreateAPIView):
 
 
 class MyDataFrameAPIView(APIView):
-    def get(self, request):
+    def get(self, request, *args, **kwargs):  # you have to write  *args, **kwargs otherwise you will get an error
+
         
-        # create a df
+        
         print(request.user)
-        stats = Stats(user = request.user)
+
+        # get days to substract from request
+        days = self.kwargs.get("days")
+
+        print(days)
+        # get the stats object
+        stats = Stats(user = request.user, days_to_subtract=days)
 
         # num_of_companies
         NumOfCompanies = stats.get_NumOfCompanies()
@@ -101,6 +108,8 @@ class MyDataFrameAPIView(APIView):
 
         # contact results
         ContactResultCount = stats.get_ContactResultCount()
+
+        DataSeries = stats.get_DataSeries()
        
         # create a dictionary from the analitics
         data= {
@@ -111,6 +120,8 @@ class MyDataFrameAPIView(APIView):
             "ContactTypeCount": ContactTypeCount,
 
             "ContactResultCount": ContactResultCount,
+
+            "ContactCountDataSeries": DataSeries,
         }
 
 
