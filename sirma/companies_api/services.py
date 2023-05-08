@@ -39,10 +39,22 @@ class Stats:
         self.df_merge = pd.merge(self.df_company,self.df_contacts ,on="name")
 
     def get_NumOfCompanies(self):
-        print(self.df_company["user__name"].unique)
         return self.df_merge.name.unique().size
     
+    def get_NumOfContacts(self):
+        return self.df_merge.typ_id__contact_type.count()
+    
+    
+
     def get_CountryToConmpny(self):
+        counts =  self.df_merge[["country","name"]].drop_duplicates().groupby("country").aggregate("count")
+        li = []
+        for row in counts.iterrows():
+            li.append({"country" : row[0], "company_count":row[1][0]})
+
+        return li
+    
+    def get_ContactToConmpny(self):
          counts =  self.df_merge[["country","name"]].groupby("country").aggregate("count")
          li = []
          for row in counts.iterrows():

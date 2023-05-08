@@ -100,6 +100,9 @@ class MyDataFrameAPIView(APIView):
         # num_of_companies
         NumOfCompanies = stats.get_NumOfCompanies()
 
+        # num_of_contacts
+        NumOfContacts = stats.get_NumOfContacts()
+
         # countries
         CountryToConmpny = stats.get_CountryToConmpny()
 
@@ -114,6 +117,8 @@ class MyDataFrameAPIView(APIView):
         # create a dictionary from the analitics
         data= {
             "NumOfCompanies": NumOfCompanies,
+
+            "NumOfContacts": NumOfContacts,
 
             "CountryToConmpny": CountryToConmpny,
 
