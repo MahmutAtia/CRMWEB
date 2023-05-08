@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 
-## for simple JWT
+# for simple JWT
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,13 +44,13 @@ INSTALLED_APPS = [
     'django_extensions',
     "django_countries",
     'rest_framework',
-    'corsheaders',  
+    'corsheaders',
     "companies",
     "accounts",
     'djoser',
     "companies_api"
-    
-    
+
+
 
 ]
 
@@ -62,15 +62,25 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "corsheaders.middleware.CorsMiddleware"
+    "corsheaders.middleware.CorsMiddleware",
+    'companies.middleware.CompaniesMiddleware',
+
 ]
+DATABASE_ROUTERS = ['companies.router.CompaniesRouter']  # new
+
+
+ALLOWED_HOSTS = ['sirma.local', 'demo.local', "company2.local",'localhost',    '127.0.0.1',]
+
+
+
 
 ROOT_URLCONF = 'sirma.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,"build")], # for the react code after building it
+        # for the react code after building it
+        'DIRS': [os.path.join(BASE_DIR, "build")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -93,6 +103,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }, 'demo': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'demo.sqlite3',
+
+    },
+    'company2': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME':  BASE_DIR / 'company2.sqlite3',
+
     }
 }
 
@@ -133,9 +152,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'build/static') # for react 
+    os.path.join(BASE_DIR, 'build/static')  # for react
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static') 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -160,10 +179,9 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),   
-   "ACCESS_TOKEN_LIFETIME": timedelta(weeks=4),
+    'AUTH_HEADER_TYPES': ('JWT',),
+    "ACCESS_TOKEN_LIFETIME": timedelta(weeks=4),
 }
-
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -180,9 +198,8 @@ AUTH_USER_MODEL = "accounts.User"
 # )
 
 
-
-#app pass:  jwdjrvmpvdydmxft
-#asia5523434013@gmail.com
+# app pass:  jwdjrvmpvdydmxft
+# asia5523434013@gmail.com
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -191,31 +208,26 @@ EMAIL_HOST_PASSWORD = 'jwdjrvmpvdydmxft'
 EMAIL_USE_TLS = True
 
 
-
-
-
 DJOSER = {
-    'LOGIN_FIELD':'email',
-    'USER_CREATE_PASSWORD_RETYPE':True,
-    "PASSWORD_CHANGED_EMAIL_CONFIRMATION":True,
-    "USERNAME_CHANGED_EMAIL_CONFIRMATION":True,
-    "SEND_CONFIRMATION_EMAIL":True,
+    'LOGIN_FIELD': 'email',
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
+    "USERNAME_CHANGED_EMAIL_CONFIRMATION": True,
+    "SEND_CONFIRMATION_EMAIL": True,
     'SET_USERNAME_RETYPE': True,
     'SET_PASSWORD_RETYPE': True,
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
-      'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
-      'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {
-    'user_create': 'accounts.serializers.CreateUserSerializer',
-    'user_create': 'accounts.serializers.CreateUserSerializer',
-    'user_create': 'accounts.serializers.CreateUserSerializer',
+        'user_create': 'accounts.serializers.CreateUserSerializer',
+        'user_create': 'accounts.serializers.CreateUserSerializer',
+        'user_create': 'accounts.serializers.CreateUserSerializer',
     },
 }
 
 
-
-ALLOWED_HOSTS = [    'localhost',    '127.0.0.1',    'dea1-78-168-153-158.ngrok-free.app',]
 
 
 CORS_ALLOW_CREDENTIALS = True
