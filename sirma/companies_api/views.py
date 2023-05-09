@@ -92,10 +92,11 @@ class MyDataFrameAPIView(APIView):
 
         # get days to substract from request
         days = self.kwargs.get("days")
+        user_id = self.kwargs.get("user_id")
 
         print(days)
         # get the stats object
-        stats = Stats(user = request.user, days_to_subtract=days)
+        stats = Stats(user = request.user, user_to_filter = user_id ,days_to_subtract=days)
 
         # num_of_companies
         NumOfCompanies = stats.get_NumOfCompanies()
@@ -127,6 +128,8 @@ class MyDataFrameAPIView(APIView):
             "ContactResultCount": ContactResultCount,
 
             "ContactCountDataSeries": DataSeries,
+
+            "ContactsByUser" : stats.get_ContactsByUser(),
         }
 
 

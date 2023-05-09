@@ -7,19 +7,24 @@ import datetime
 from datetime import timedelta
 
 class Stats:
-    def __init__(self, user, days_to_subtract=1):  # days_to_subtract=1 greater than yesterday
+    def __init__(self, user,user_to_filter, days_to_subtract=1):  # days_to_subtract=1 greater than yesterday
 
         #date
         self.days = days_to_subtract
         self.date = datetime.datetime.now().date() - timedelta(days=self.days) 
 
         #user
-        self.user = user
+        self.user = user    
         
 
         #dataframes filter by user
-        if user.is_superuser:
-            self.df_company = read_frame(Company.objects.values('user__name','name' ,'country',  'status'))
+        if user.is_staff:
+            if user_to_filter == 0:
+                self.df_company = read_frame(Company.objects.values('user__name','name' ,'country',  'status'))
+            else:
+                print("user to filter is ", user_to_filter)
+                self.df_company = read_frame(Company.objects.filter(user=user_to_filter).values('user__name','name' ,'country',  'status'))
+
         else:
             self.df_company = read_frame(Company.objects.filter(user=user.id).values('user__name','name' ,'country',  'status'))
 
@@ -78,7 +83,7 @@ class Stats:
         return li
     
     def get_DataSeries(self):
-        df = self.df_contacts[['date','typ_id__contact_type']].groupby('date').count()
+        df = self.df_merge[['date','typ_id__contact_type']].groupby('date').count()
        
         li = []
         for i in range(len(df)):
@@ -86,6 +91,13 @@ class Stats:
             li.append({"Date" : row.name, "Number Of Contacts":row[0]})
         return li
 
+    def get_ContactsByUser(self):
+        counts = self.df_merge["user__name"].value_counts()
+        li = []
+        for row in counts.iteritems():
+            li.append({"User" : row[0], "Contacts Count":row[1]})
+
+        return li
 
 
 

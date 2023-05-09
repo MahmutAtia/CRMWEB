@@ -224,6 +224,9 @@ DJOSER = {
         'user_create': 'accounts.serializers.CreateUserSerializer',
         'user_create': 'accounts.serializers.CreateUserSerializer',
         'user_create': 'accounts.serializers.CreateUserSerializer',
+            'user': 'accounts.serializers.SpecialUserSerializer',
+            'current_user': 'accounts.serializers.SpecialUserSerializer',
+
     },
 }
 

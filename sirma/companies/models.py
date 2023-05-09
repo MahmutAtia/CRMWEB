@@ -16,9 +16,9 @@ class Company(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL,null=True)
     name = models.CharField(max_length=50 , unique=True)
     country = models.ForeignKey(Country,on_delete=models.CASCADE,null=True, blank=True )
-    email = models.EmailField(blank=True)
-    phone = models.CharField(max_length=30,null=True, blank=True)
-    website = models.URLField(blank=True,null=True)
+    email = models.CharField(max_length=255,blank=True)
+    phone = models.CharField(max_length=50,null=True, blank=True)
+    website = models.CharField(max_length=255,blank=True,null=True)
     manager = models.CharField(max_length=128,null=True, blank=True)
     status = models.BooleanField( null=True, blank=True)
     def __str__(self):
