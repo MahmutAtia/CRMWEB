@@ -3,8 +3,14 @@ from companies.models import *
 import pandas as pd
 from pathlib import Path
 from accounts.models import User
-li = [['İRTİBAT ŞEKLİ 1', 'KAÇINCI İRTİBAT1', 'İRTİBAT TARİHİ 1', 'İRTİBAT SONUCU1', "İRTİBAT PUANI1"], ['İRTİBAT ŞEKLİ2', 'KAÇINCI İRTİBAT2', 'İRTİBAT TARİHİ 2', 'İRTİBAT SONUCU2', "İRTİBAT PUANI2"], ['İRTİBAT ŞEKLİ3', 'KAÇINCI İRTİBAT3', 'İRTİBAT TARİHİ 3', 'İRTİBAT SONUCU3', "İRTİBAT PUANI3"], ['İRTİBAT ŞEKLİ4', 'KAÇINCI İRTİBAT4', 'İRTİBAT TARİHİ 4', 'İRTİBAT SONUCU4', "İRTİBAT PUANI4"], [
-    'İRTİBAT ŞEKLİ5', 'KAÇINCI İRTİBAT5', 'İRTİBAT TARİHİ 5', 'İRTİBAT SONUCU5', "İRTİBAT PUANI5", "İRTİBAT PUANI5"], ['İRTİBAT ŞEKLİ6', 'KAÇINCI İRTİBAT6', 'İRTİBAT TARİHİ6', 'İRTİBAT SONUCU6', "İRTİBAT PUANI6"], ['İRTİBAT ŞEKLİ7', 'KAÇINCI İRTİBAT7', 'İRTİBAT TARİHİ 7', 'İRTİBAT SONUCU7', "İRTİBAT PUANI7"], ['İRTİBAT ŞEKLİ8', 'KAÇINCI İRTİBAT8', 'İRTİBAT TARİHİ 8', 'İRTİBAT SONUCU8', "İRTİBAT PUANI8"]]
+li = [['İRTİBAT ŞEKLİ', 'KAÇINCI İRTİBAT', 'İRTİBAT TARİHİ ', 'İRTİBAT SONUCU'],
+['İRTİBAT ŞEKLİ.1', 'KAÇINCI İRTİBAT.1', 'İRTİBAT TARİHİ .1', 'İRTİBAT SONUCU.1'],
+['İRTİBAT ŞEKLİ.2', 'KAÇINCI İRTİBAT.2', 'İRTİBAT TARİHİ .2', 'İRTİBAT SONUCU.2'],
+['İRTİBAT ŞEKLİ.3', 'KAÇINCI İRTİBAT.3', 'İRTİBAT TARİHİ .3', 'İRTİBAT SONUCU.3'],
+['İRTİBAT ŞEKLİ.4', 'KAÇINCI İRTİBAT.4', 'İRTİBAT TARİHİ .4', 'İRTİBAT SONUCU.4'],
+['İRTİBAT ŞEKLİ.5', 'KAÇINCI İRTİBAT.5', 'İRTİBAT TARİHİ .5', 'İRTİBAT SONUCU.5'],
+['İRTİBAT ŞEKLİ.6', 'KAÇINCI İRTİBAT.6', 'İRTİBAT TARİHİ .6', 'İRTİBAT SONUCU.6'],
+['İRTİBAT ŞEKLİ.7', 'KAÇINCI İRTİBAT.7', 'İRTİBAT TARİHİ .7', 'İRTİBAT SONUCU.7']]
 
 
 # date time
@@ -16,24 +22,30 @@ import random
 def run():
 
     # delete all objects
-    Company.objects.all().delete()
-    Country.objects.all().delete()
-    Contact.objects.all().delete()
-    ContactType.objects.all().delete()
-    ContactResult.objects.all().delete()
-
+   
     path = Path(__file__).resolve().parent / "df.xlsx"
     file = pd.ExcelFile(path)
     df = pd.read_excel(file, "ARAMA LİSTELERİ V.2", header=1)
+    print(df.columns)
+
     for i in range(len(df)):
         row = df.iloc[i, :]
 
-        # get user
-        user = User.objects.get(name="mohamed atia")
+        
         # print(user)
 
         # create or get country
         con, created = Country.objects.get_or_create(name=row['ÜLKE'])
+
+        if con.name in  ["Irak","Moritanya","Libya","Saudi Arabistan","Filistin","Ürdün"]:
+
+
+            # get user
+            user = User.objects.get(name="mohamed atia")
+
+        else:
+            # get user
+            user = User.objects.get(name="chris")
 
         # status logic
         status = ""
@@ -53,7 +65,7 @@ def run():
         except:
             # deal with duplicated name
             company_name = str(row['FİRMA ADI']) + " " + \
-                str(row['ÜLKE']) + " duplicated name "  + str(random.randint(0,1000) )    # there is int or float somewere so we convert it to string
+                str(row['ÜLKE']) + " duplicated name "  + str(random.randint(1000,100000) )    # there is int or float somewere so we convert it to string
                                                                                      # random number to avoid multi duplicated name  
 
             print(company_name)

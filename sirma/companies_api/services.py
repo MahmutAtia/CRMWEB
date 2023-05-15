@@ -44,6 +44,7 @@ class Stats:
         self.df_merge = pd.merge(self.df_company,self.df_contacts ,on="name")
 
     def get_NumOfCompanies(self):
+        self.df_merge.to_excel("../../merge.xlsx")
         return self.df_merge.name.unique().size
     
     def get_NumOfContacts(self):
