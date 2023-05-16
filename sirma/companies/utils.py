@@ -6,6 +6,9 @@ def hostname_from_the_request(request):
 def tenant_db_from_the_request(request):
     hostname = hostname_from_the_request(request)
     tenants_map = get_tenants_map()
+    if hostname =="f600-88-240-181-166.ngrok-free.app":
+        hostname = "localhost"
+  
     return tenants_map.get(hostname)
 
 def get_tenants_map():

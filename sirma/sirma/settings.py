@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     "companies",
     "accounts",
     'djoser',
-    "companies_api"
+    "companies_api",
+    "MobileAPI"
 
 
 
@@ -69,7 +70,7 @@ MIDDLEWARE = [
 DATABASE_ROUTERS = ['companies.router.CompaniesRouter']  # new
 
 
-ALLOWED_HOSTS = ['sirma.local', 'demo.local', "company2.local",'localhost',    '127.0.0.1',]
+ALLOWED_HOSTS = ['sirma.local', 'demo.local', "company2.local",'localhost',    '127.0.0.1', '*']
 
 
 

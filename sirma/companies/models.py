@@ -7,8 +7,12 @@ from django_countries.fields import CountryField
 class Country(models.Model):
     name = models.CharField(max_length=128,blank=True)
 
+    class Meta:
+        ordering= ["name"]
+
     def __str__(self):
         return self.name
+    
 
 
 

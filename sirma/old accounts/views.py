@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.generics import CreateAPIView,ListCreateAPIView
+from rest_framework.generics import CreateAPIView
 from .serializers import UserSerializer
 from .models import User
 from rest_framework import permissions
@@ -22,5 +22,7 @@ class RegisterApi(CreateAPIView):
     
     def perform_create(self, serializer):
         return super().perform_create(serializer)
+
+
 
 
