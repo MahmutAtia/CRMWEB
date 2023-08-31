@@ -14,9 +14,10 @@ class CompanySerializer(serializers.ModelSerializer):
     country_name = serializers.CharField(source = "country.name",read_only=True)
 
     country = serializers.CharField(write_only = True)
+
     class Meta:
         model = Company
-        fields = ["id","name" , "country_name", "country" ,"email", "phone", "website", "manager", "status"
+        fields = ["user","id","name" , "country_name", "country" ,"email", "phone", "website", "manager", "status"
                     ,"company_url","contact_url"]
 
     def create(self, validated_data):
@@ -83,6 +84,15 @@ class CompanySerializer(serializers.ModelSerializer):
         pk = obj.pk
        
         return reverse.reverse("companies-api:company-details",kwargs={"pk":pk},request=request)
+    
+    # def get_last_contact(self,obj):
+    #     print("hello")
+    #     qs = obj.contact_set.all()
+    #     print(qs)
+    #     if qs.exists():
+    #         return qs.last().date
+    #     else:
+    #         return None
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -138,9 +148,24 @@ class ContactSerializer(serializers.ModelSerializer):
         contact = Contact.objects.create(company=company,typ=contact_type,date=validated_data["date"],result=result)
         print(contact)
 
+
+        # set not interested
+        if validated_data["contact_result"] == "İLGİLENMİYOR":
+            company.status = False
+            company.save()
+
+        elif validated_data["contact_result"] == "NORMAL_AGAIN":
+            company.status = None
+            company.save()
+
+        elif validated_data["contact_result"] == "MAKE_IMPORTANT":
+            company.status = True
+            company.save()
+
+
+
         
 
-        print(contact)
        
         
         return contact

@@ -48,7 +48,7 @@ class Contact(models.Model):
     date = models.DateField( null=True,blank=True)   
     result = models.ForeignKey(ContactResult , on_delete= models.SET_NULL,null=True)
     class Meta:
-        ordering= ["date"]
+        ordering= ["date","-id"]
 
     def __str__(self):
         return  "\nCompany: " + self.company.name

@@ -20,6 +20,11 @@ from .services import Stats
 from .stats_objects import *
 import json
 
+# get the queryset for the user
+from accounts.models import User
+
+from datetime import date
+
 
 
 
@@ -135,6 +140,56 @@ class MyDataFrameAPIView(APIView):
 
         return Response(data)
 
+
+def weekly_report_as_text (request, *args, **kwargs):
+    
+    # get mahmoud user
+    user = User.objects.get(id=2)
+
+    stats = Stats(user = user, user_to_filter = 2 ,days_to_subtract=7)
+
+
+
+    # num_of_companies
+    NumOfCompanies = stats.get_NumOfCompanies()
+
+    # num_of_contacts
+    NumOfContacts = stats.get_NumOfContacts()
+
+    # countries
+    CountryToConmpny = stats.get_CountryToConmpny()
+
+    # contact types
+    ContactTypeCount = stats.get_ContactTypeCount()
+
+    # contact results
+    ContactResultCount = stats.get_ContactResultCount()
+
+
+    
+    country_text = ""
+    for country in CountryToConmpny:
+        country_text += f"{country['country']} : {country['company_count']}  "
+
+    contact_type_text = ""  
+    for contact_type in ContactTypeCount:
+        contact_type_text += f"{contact_type['contact_type']} : {contact_type['contact_count']}\n"
+    
+    report = (
+    f"""
+    Hafta Özeti:
+    Mahmoud Atia
+    Tarih : {date.today()}
+    Toplam Firma : {NumOfContacts}
+    Ülkeler:
+    {country_text}
+    
+    {contact_type_text}
+    ---------------------------------"""
+
+    )
+    print(report)
+    return HttpResponse(report)
 
 
 
