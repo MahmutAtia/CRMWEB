@@ -146,7 +146,7 @@ def weekly_report_as_text (request, *args, **kwargs):
     # get mahmoud user
     user = User.objects.get(id=2)
 
-    stats = Stats(user = user, user_to_filter = 2 ,days_to_subtract=7)
+    stats = Stats(user = user, user_to_filter = 2 ,days_to_subtract=8)
 
 
 
