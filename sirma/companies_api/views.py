@@ -27,6 +27,10 @@ from datetime import date
 
 
 
+from rest_framework.decorators import api_view
+from rest_framework import status
+
+
 
 
 # All Companies View 
@@ -246,3 +250,38 @@ def weekly_report_as_text (request, *args, **kwargs):
     
     # return response.HttpResponse("hi")
 
+
+
+
+# view for checking is the company name exists
+@api_view(['get'])
+def check_company_name(request, *args, **kwargs):
+    company_name = request.GET.get("company_name")
+    print(company_name)
+
+    
+    if company_name:
+        qs = Company.objects.filter(name=company_name, user=2)
+        if qs.exists():
+            return Response({"message": "company name exists"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "company name does not exists"}, status=status.HTTP_204_NO_CONTENT)
+
+    else:
+        return Response({"message": "company name does not exists"}, status=status.HTTP_204_NO_CONTENT)
+class CheckCompanyName(ListAPIView):
+    serializer_class = CompanySerializer
+    queryset = Company.objects.all()
+
+    def get_queryset(self):
+        company_name = self.request.GET.get("company_name")
+        print(company_name)
+        qs = Company.objects.filter(name__icontains=company_name)
+        return qs
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = CompanySerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    # permission_classes = [IsAuthenticated]
